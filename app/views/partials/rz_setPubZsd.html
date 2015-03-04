@@ -1,0 +1,48 @@
+<h4 class="admin-title">公共知识点设置</h4>
+<div class="dagangInput setDaGangBox">
+    <div class="row">
+        <div class="col-md-6">
+            <select class="form-control" ng-model="ly_id" ng-change="getKeMuOfSelectLy(ly_id)"
+                    ng-options="ly.LINGYU_ID as ly.LINGYUMINGCHENG for ly in setZsdLingYu">
+                <option value="">请选择领域</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <div class="form-control fakeMutiSelect">
+                <div ng-click="adminParams.fakeSelectShow = true" class="pleaseSelect">
+                    <input type="text" ng-model="adminParams.fakePlaceHolder" class="bd0 wp90"/>
+                </div>
+                <div class="fakeOptionList" ng-show="adminParams.fakeSelectShow">
+                    <div class="options">
+                        <label class="checkbox" ng-repeat="km in selectedKeMu">
+                            <input type="checkbox" ng-click="getKeMuId($event, km, true)"> {{km.LINGYUMINGCHENG}}
+                        </label>
+                    </div>
+                    <div class="btns">
+                        <a href="javascript:void(0)" ng-click="getKeMuPubZsdData()">确定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row zsdWrap mt15">
+        <ul class="col-md-8 list-unstyled plr10">
+            <li ng-repeat="zsd in zsdSetZsdData">
+                <p ng-click="showModifyZsdBox($index, zsd.ZHISHIDIAN_ID)" class="zsd"
+                   ng-bind="zsd.ZHISHIDIANMINGCHENG" ng-class="{active: adminParams.pubZsdTabOn == $index}"></p>
+            </li>
+        </ul>
+        <div class="col-md-4" ng-show="adminParams.zsdWrapShow">
+            <div class="keMuWrap">
+                <label class="checkbox" ng-repeat="km in selectedKeMu">
+                    <input type="checkbox" name="zsdKeMuCb" class="{{'keMu' + km.LINGYU_ID}}"
+                           ng-click="getKeMuId($event, km, false)"> {{km.LINGYUMINGCHENG}}
+                </label>
+            </div>
+            <div class="btns">
+                <button type="button" class="btn btn-default" ng-click="deletePubZsd()">删除知识点</button>
+                <button type="button" class="btn btn-primary ml10" ng-click="submitZsdKeMuModify()">提交修改</button>
+            </div>
+        </div>
+    </div>
+</div>

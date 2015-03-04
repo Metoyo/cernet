@@ -1,0 +1,42 @@
+<div class="innerWrap innerWrapperSubDs tongjiWrapper">
+    <div class="testPaperSummary">
+        <h2 class="logo pull-left">
+            <img src="/images/mingti/icon/logo.png" alt="">
+        </h2>
+        <div class="subjectBox clearfix">
+            <h2 class="pull-left" ng-bind="session.defaultLyName"></h2>
+        </div>
+        <div class="tj-btn-box pull-left">
+            <div ng-hide="isTjDetailShow">
+                <button type="button" class="btn btn-primary" ng-click="lastKaoShiTongJi()">
+                    上次考试统计
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="lastShiJuanTongJi()">
+                    上次试卷统计
+                </button>
+            </div>
+            <div ng-show="isTjDetailShow">
+                <p>
+                    <button type="button" class="btn btn-primary w110" ng-click="tjSubShowStudentInfo()">
+                        分数详情
+                    </button>
+                </p>
+                <p>
+                    <button type="button" class="btn btn-primary w110" ng-click="tjSubShowItemInfo()">
+                        易错题目
+                    </button>
+                </p>
+                <p>
+                    <button type="button" class="btn btn-primary" ng-click="showScoreChart()">
+                        分数详细统计
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="contentWraps" ng-init="tjTpl = 'views/partials/tj_home.html'" ng-include="tjTpl">
+        </div>
+    </div>
+</div>
+<!--<script src="http://echarts.baidu.com/build/echarts-plain.js"></script>-->

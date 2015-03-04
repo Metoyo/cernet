@@ -1,0 +1,276 @@
+<div class="renzhengWrapper">
+    <div class="row registerBox">
+        <h4 class="logo text-center">
+            <img src="/images/renzheng/icon/logo_big.png" alt="赛尔互联">
+        </h4>
+        <div class="col-md-10 col-md-offset-1 infoBox">
+            <!-- FORM -->
+            <form name="userForm" ng-submit="submitForm()" novalidate>
+                <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+                <ul class="list-unstyled list-inline nav-tabs">
+                    <li class="active">
+                        个人信息
+                    </li>
+                    <li ng-show="stepTwo">
+                        学科选择
+                    </li>
+                    <li ng-show="stepThree">
+                        确认信息
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane clearfix active">
+                        <!-- 用户名 -->
+                        <div class="form-group col-md-6">
+                            <label>系统账号<strong class="clRed">*</strong><em>(4-30个字符,由字母、数字和_组成,并以字母开头。)</em></label>
+                            <input type="text" name="yonghuming" placeholder="系统账号" tabindex="1" class="form-control"
+                                   ng-pattern="userNameRegexp" ng-minlength=4 ng-maxlength=30
+                                   ng-model="personalInfo.yonghuming" required autofocus="true"
+                                   ng-blur="checkUsrExist('yonghuming', personalInfo.yonghuming)"/>
+                            <!--<p ng-show="userForm.yonghuming.$error.required" class="help-block">用户名不能为空！</p>-->
+                            <p ng-show="userForm.yonghuming.$error.pattern" class="help-block yonghuming">系统账号格式不正确！</p>
+                            <p ng-show="yonghumingExist" class="help-block yonghuming">系统账号已存在！</p>
+                        </div>
+                        <!-- 邮箱 -->
+                        <div class="form-group col-md-6">
+                            <label>邮箱<strong class="clRed">*</strong></label>
+                            <input type="email" name="youxiang" placeholder="邮箱" tabindex="4" class="form-control"
+                                   ng-model="personalInfo.youxiang" ng-pattern="emailRegexp" required
+                                   ng-blur="checkUsrExist('youxiang', personalInfo.youxiang)"/>
+                            <!--<p ng-show="userForm.youxiang.$error.required" class="help-block">邮箱不能为空！</p>-->
+                            <p ng-show="userForm.youxiang.$error.pattern" class="help-block">请输入有效的邮箱地址！</p>
+                            <p ng-show="youxiangExist" class="help-block">邮箱地址已存在！</p>
+                        </div>
+                        <!-- 密码 -->
+                        <div class="form-group col-md-6">
+                            <label>密码 <strong class="clRed">*</strong> <em>(6-20个字符)</em></label>
+                            <input type="password" name="mima" placeholder="密码" tabindex="2"
+                                   class="form-control regPassword" ng-minlength=6 ng-maxlength=20
+                                   ng-model="personalInfo.mima" ng-pattern="passwordRegexp" required
+                                   ng-blur="checkPassword()"/>
+                            <!--<p ng-show="userForm.mima.$error.required" class="help-block">密码不能为空！</p>-->
+                            <p ng-show="userForm.mima.$error.pattern" class="help-block">密码需要6-20个字符！</p>
+                        </div>
+                        <!-- 真实姓名 -->
+                        <div class="form-group col-md-6">
+                            <label>真实姓名<strong class="clRed">*</strong></label>
+                            <input type="text" name="xingming" placeholder="真实姓名" tabindex="5" class="form-control"
+                                   ng-pattern="realNameRegexp"
+                                   ng-minlength=2 ng-maxlength=20 ng-model="personalInfo.xingming"
+                                    required />
+                            <!--<p class="help-block" ng-show="userForm.xingming.$error.required">真实姓名不能为空！</p>-->
+                            <!--<p ng-show="userForm.xingming.$error.minlength" class="help-block">真实姓名太短了！</p>-->
+                            <!--<p ng-show="userForm.xingming.$error.maxlength" class="help-block">真实姓名太长了!</p>-->
+                            <p ng-show="userForm.xingming.$error.pattern" class="help-block">真实姓名格式不正确！</p>
+                        </div>
+                        <!-- 确认密码 -->
+                        <div class="form-group col-md-6">
+                            <label>确认密码<strong class="clRed">*</strong><em>(6-20个字符)</em></label>
+                            <input type="password" name="confirmPassword" ng-model="personalInfo.mima_verify"
+                                   data-password-verify="personalInfo.mima" ng-blur="checkPassword()"
+                                   required placeholder="确认密码" tabindex="3" class="form-control" />
+                            <p class="help-block" ng-show="userForm.confirmPassword.$error.passwordVerify">
+                                确认密码和密码不匹配！
+                            </p>
+                            <p class="help-block" ng-show="ifPswTheSame">
+                                确认密码和密码不匹配！
+                            </p>
+                        </div>
+                        <!-- 手机号码 -->
+                        <div class="form-group col-md-6">
+                            <label>手机号码</label>
+                            <input type="text" name="shouji" placeholder="手机号码" tabindex="6" class="form-control"
+                                   ng-pattern="/^[1][34578][0-9]{9}$/" ng-model="personalInfo.shouji" />
+                            <p ng-show="userForm.shouji.$error.pattern" class="help-block">手机号码格式有误！</p>
+                        </div>
+                        <!-- 提交按钮 -->
+                        <div class="form-group col-md-12 pull-left text-right">
+                           <span class="pull-left"><strong class="clRed">*</strong> 为必填项！</span>
+                            <button type="button" ng-click="validatePersonalInfo()" ng-disabled="userForm.yonghuming.$invalid
+                                 || yonghumingExist || userForm.mima.$invalid || userForm.confirmPassword.$invalid
+                                 || userForm.youxiang.$invalid || youxiangExist || userForm.xingming.$invalid ||
+                                 ifPswTheSame" class="btn btn-success nextBtn">
+                                下一步<span></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tab-pane clearfix">
+                        <div class="form-group col-md-6 pull-left">
+                            <label><span>单位归属类别</span><span class="msgBox">此项不能为空！</span></label>
+                            <select ng-model="selected_jglb" class="form-control organization"
+                                    ng-change="getJglist(selected_jglb)"
+                                    ng-options="lb.LEIBIE_ID as lb.LEIBIEMINGCHENG for lb in jigoulb_list">
+                                <option value="">请选择</option>
+                            </select>
+                            <!--<select class="form-control organization" disabled="disabled">-->
+                                <!--<option value="1">大学</option>-->
+                            <!--</select>-->
+                        </div>
+                        <div class="form-group col-md-6 pull-right">
+                            <label><span>单位</span><span class="msgBox">此项不能为空！</span></label>
+                            <select class="form-control subOrganization" ng-model="selected_jg"
+                                    ng-change="getJgId(selected_jg)"
+                                    ng-options="jg.JIGOU_ID as jg.JIGOUMINGCHENG for jg in jigou_list">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12 pull-left">
+                            <label><span>学科领域</span><span class="msgBox">此项不能为空！</span></label>
+                            <select class="form-control myField" ng-model="selected_ly"
+                                    ng-change="getKemuList(selected_ly)"
+                                    ng-options="ly.LINGYU_ID as ly.LINGYUMINGCHENG for ly in lingyu_list">
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12 pull-left objectWrap" ng-show="keMuListLengthExist">
+                            <div class="objectWrapSub">
+                                <label class="msgLabel"><span>科目</span></label>
+                                <p ng-hide="objAndRight.length" class="cInfo">请在下面勾选科目和职务</p>
+                                <div class="selectedObject">
+                                    <div class="selectedObjectBox pull-left">
+                                        <div class="selectedObjectList" ng-class-odd="'pull-left'"
+                                             ng-class-even="'pull-right'" ng-repeat="oar in objAndRight">
+                                            <div class="pull-left">
+                                                <p class="kemumingcheng">
+                                                    <span>科目：</span>
+                                                    <span class="objectName">{{oar.lingyu[0].LINGYUMINGCHENG}}</span>
+                                                </p>
+                                                <p class="kemuquanxian">
+                                                    <span>职务：</span>
+                                                    <span class="rightName">{{oar.juese.jueseName.toString()}}</span>
+                                                </p>
+                                            </div>
+                                            <div class="btn-can">
+                                                <a href="javascript:void(0)" ng-click="delSelectedObject($index)">
+                                                    <span class="glyphicon glyphicon-remove-circle"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-hide="keMuSelectBox">
+                                <a href="javascript:void(0)" ng-click="keMuSelectBox=true" ng-hide="ifKuMuListNull">
+                                    <span class="glyphicon glyphicon-plus-sign"></span>新增科目
+                                </a>
+                            </div>
+                            <div class="objectToggleBox" ng-show="keMuSelectBox">
+                                <div class="form-group col-md-12">
+                                    <label>科目</label>
+                                    <div class="chooseObject">
+                                        <label class="radio-inline" ng-repeat="km in kemu_list">
+                                            <input type="radio" name="objectName" value="{{km.LINGYU_ID}}"
+                                                   ng-click="getLingYuVal($index)">
+                                            <span>{{km.LINGYUMINGCHENG}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>职务</label>
+                                    <div class="chooseRight">
+                                        <label class="checkbox-inline" ng-repeat="js in juese_list">
+                                            <input type="checkbox" name="rightName" value="{{js.JUESE_ID}}"
+                                                   ng-click="getJueSeArr($index)">
+                                            <span>{{js.JUESEMINGCHENG}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 text-right">
+                                    <button type="button" class="btn btn-primary" ng-disabled="!linyuValue || !jueseValue"
+                                            ng-click="getObjectAndRight();keMuSelectBox=false">
+                                        确定
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 pull-left">
+                            <button type="button" class="btn btn-success prevBtn pull-left" ng-click="goToPersonInfo()">
+                                上一步<span></span>
+                            </button>
+                            <button type="button" class="btn btn-success nextBtn pull-right" ng-click="goToSubmit()"
+                                    ng-disabled="!objAndRight.length || !selected_jg">
+                                下一步<span></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tab-pane clearfix">
+                        <div class="col-md-6">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        系统账号
+                                    </td>
+                                    <td>
+                                        {{registerDate.yonghuming}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        真实姓名
+                                    </td>
+                                    <td>
+                                        {{registerDate.xingming}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        邮箱
+                                    </td>
+                                    <td>
+                                        {{registerDate.youxiang}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        手机
+                                    </td>
+                                    <td>
+                                        {{registerDate.shouji}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 20px">
+                                        单位
+                                    </td>
+                                    <td>
+                                        {{registerDate.jiGouName}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        科目
+                                    </th>
+                                    <th>
+                                        职务
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="oar in objAndRight">
+                                    <td>
+                                        {{oar.lingyu[0].LINGYUMINGCHENG}}
+                                    </td>
+                                    <td>
+                                        {{oar.juese.jueseName.toString()}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <p class="register-hero">
+                                您申请的学科职务需要通过该学科负责人审核之后才可生效，请及时通知学科负责人并耐心等待
+                            </p>
+                        </div>
+                        <div class="col-md-12 pb10">
+                            <button type="button" class="btn btn-success prevBtn pull-left" ng-click="goToJueSe()">
+                                上一步<span></span>
+                            </button>
+                            <button type="button" class="btn btn-success submitBtn pull-right"
+                                    ng-click="submitRegisterInfo()">
+                                提交<span></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

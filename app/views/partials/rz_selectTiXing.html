@@ -1,0 +1,21 @@
+<h4>题型选择</h4>
+<div class="dagangInput row">
+    <!--已选科目-->
+    <div class="col-md-4 lingYu-list">
+        <h4><strong>本机构科目:</strong></h4>
+        <p ng-repeat="sLy in selectTiXingLiYing" ng-class="{active:activeLingYu == sLy.LINGYU_ID}"
+           ng-click="whichLingYuActive(sLy.LINGYU_ID)">
+            <span ng-bind="sLy.LINGYUMINGCHENG"></span>
+        </p>
+    </div>
+    <div class="col-md-8 tiXing-list">
+        <label class="checkbox-inline" ng-repeat="atx in allTiXing">
+            <input type="checkbox" value="atx.TIXING_ID" ng-click="addOrRemoveTiXing($event, atx)"
+                   ng-checked="selectedTxLyStr.indexOf('tx' + atx.TIXING_ID + ';') > -1">{{atx.TIXINGMINGCHENG}}
+        </label>
+    </div>
+</div>
+<div class="save-box">
+    <span class="save-msg">保存成功!</span>
+    <button class="btn btn-primary" ng-click="saveSelectTiXing()">保存</button>
+</div>

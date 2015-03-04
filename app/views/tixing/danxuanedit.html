@@ -1,0 +1,200 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-horizontal">
+            <div class="form-header">
+                <div class="form-group form-th">
+                    <div class="col-sm-8 col-sm-offset-1 text-center">
+                        题干
+                    </div>
+                </div>
+                <div class="form-group zsdNameBox">
+                    <div class="col-sm-8 col-sm-offset-1">
+                        知识点：【<span ng-bind="selectZhiShiDian"></span>】
+                    </div>
+                </div>
+                <div class="form-group answerBox" ng-hide="hideDanXuanEdt" ng-init="hideDanXuanEdt=false">
+                    <div class="col-sm-8 col-sm-offset-1 text-right">
+                        <a href="javascript:void(0)" ng-click="showDanXuanTiGanEditor();hideDanXuanEdt=true">题干编辑器</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">题目</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control formulaEditTiGan" rows="5" ng-model="danXuanData.shuju.TIGAN"
+                                  placeholder="请输入题干"></textarea>
+                        <div class="previewBox" ng-show="hideDanXuanEdt">
+                            <h4 class="title">
+                                <span class="pull-left">
+                                    内容预览：
+                                </span>
+                                <span class="pull-right" ng-click="removeTiGanEditor();hideDanXuanEdt=false">
+                                    关闭题干编辑器
+                                </span>
+                            </h4>
+                            <div id="prevDoc">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group fileUploadBox">
+                    <div id="mediaPlugin">
+                        <div class="mediaPluginInner">
+                            <div class="row">
+                                <p class="uploadBtnBox">
+                                    <input type="file" file-upload multiple class="pull-left hide addFileBtn"/>
+                                    <button ng-click="addMyFile()" class="btn btn-default pull-left">添加文件</button>
+                                    <span ng-show="uploadFiles.length">{{uploadFiles.length}}个文件</span>
+                                    <button ng-click="uploadMyFiles()" class="btn btn-default pull-right">添加到编辑器</button>
+                                </p>
+                                <p ng-repeat="fl in uploadFiles track by $index">
+                                    <span ng-bind="fl.name"></span>
+                                    <span ng-bind="(fl.size/1024).toFixed(2) + 'KB'"></span>
+                                    <span class="glyphicon glyphicon-remove" ng-click="deleteSelectFile($index)"></span>
+                                </p>
+                            </div>
+                            <div class="closeBtn">
+                                <a href="javascript:void(0)" ng-click="closeMediaPlugin()">关闭</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group" ng-show='showTiZhiEdt' ng-init="showTiZhiEdt=false">
+                    <div class="col-sm-8 col-sm-offset-1">
+                        <textarea class="form-control formulaEditTiZhi" rows="5"></textarea>
+                        <div class="previewBox">
+                            <h4 class="title">
+                            <span class="pull-left">
+                                内容预览：
+                            </span>
+                            </h4>
+                            <div id="prevTiZhiDoc">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-1 assignment-box">
+                        <span>将题支编辑器的内容赋值给选项：</span>
+                        <label class="radio-inline" ng-repeat="num in timudetail.TIGAN.tiZhiNeiRong track by $index">
+                            <input type="radio" name="fuzhi" value="$index"
+                                   ng-click='fuZhiFun($index)'> {{letterArr[$index]}}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group answerBox">
+                    <div class="col-sm-8 col-sm-offset-1 text-right">
+                        <a href="javascript:void(0)" ng-click="showDanXuanTiZhiEditor();showTiZhiEdt=true"
+                           ng-hide="showTiZhiEdt">题支编辑器</a>
+                        <a href="javascript:void(0)" ng-click="removeTiZhiEditor();showTiZhiEdt=false"
+                           ng-show="showTiZhiEdt">关闭题支编辑器</a>
+                    </div>
+                    <div class="col-sm-3">
+                        正确答案
+                    </div>
+                </div>
+                <div class="form-group tizhiWrap" ng-repeat="tizhi in timudetail.TIGAN.tiZhiNeiRong track by $index">
+                    <label class="col-sm-1 control-label">{{letterArr[$index]}}.</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control tiZhi" placeholder="请输入选项" value="{{tizhi}}">
+                    </div>
+                    <div class="col-sm-2">
+                        <span class="glyphicon glyphicon-minus-sign delete-this-tiem"
+                              ng-click="editDeleteOneItem($index)"></span>
+                        <div class="radio {{'answer' + $index}}"  ng-click="chooseDanxuanDaan($index)"
+                             ng-class="{'radio-select':timudetail.DAAN.indexOf($index) >= 0}">
+                            <input class="hidden" type="radio" name="rightAnswer" value="{{$index}}"
+                                   ng-checked="timudetail.DAAN.indexOf($index) >= 0" ng-model="danXuanData.shuju.DAAN">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-footer">
+                <div class="form-group">
+                    <a href="javascript:void(0)" id="add-one-item" title="增加一项" ng-click="editAddOneItem()"
+                       class="col-sm-1 control-label text-right add-btn">
+                        <span class="glyphicon glyphicon-plus-sign"></span> </a>
+                </div>
+                <div class="form-group nandu-select">
+                    <label class="col-sm-1 control-label">难度：</label>
+                    <div class="col-sm-8">
+                        <div class="nandu-star-box" nandu-star>
+                            <a href="javascript:void(0)"></a>
+                            <a href="javascript:void(0)"></a>
+                            <a href="javascript:void(0)"></a>
+                            <a href="javascript:void(0)"></a>
+                            <a href="javascript:void(0)"></a>
+                            <input type="text" class="hide nandu-input" value="">
+                        </div>
+                    </div>
+                </div>
+              <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-1">
+                  <div ng-init="showJieXiBox=false;showJieXiEdt=false">
+                    <a href="javascript:void(0)" ng-click="showJieXiBox=true" class="pull-left"
+                       ng-hide="showJieXiBox">添加题目解析</a>
+                    <a href="javascript:void(0)" ng-click="showJieXiBox=false" class="pull-left"
+                       ng-show="showJieXiBox">关闭题目解析</a>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-1" ng-show="showJieXiBox">
+                  <div class="text-right answerBox">
+                    <a href="javascript:void(0)" ng-click="showDanXuanJieXiEditor();showJieXiEdt=true" class="clGreen"
+                       ng-hide="showJieXiEdt">题干编辑器</a>
+                  </div>
+                  <textarea class="form-control formulaEditJieXi" rows="5" ng-model="danXuanData.shuju.TIMUFENXI"
+                      placeholder="请输入题目分析"></textarea>
+                  <div class="previewBox" ng-show="showJieXiEdt">
+                    <h4 class="title">
+                  <span class="pull-left">
+                      内容预览：
+                  </span>
+                  <span class="pull-right" ng-click="removeJieXiEditor();showJieXiEdt=false">
+                        关闭题干编辑器
+                  </span>
+                    </h4>
+                    <div id="prevJieXiDoc">
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-1 col-sm-8 text-right">
+                        <button type="button" class="btn btn-primary" ng-click="saveDanxuanEdit()">
+                            保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //题干的编辑器预览
+        $('.formulaEditTiGan').keyup(function() {
+            var tgCont = $('.formulaEditTiGan').val();
+            tgCont = tgCont.replace(/\n/g, '<br/>');
+            $('#prevDoc').html(tgCont);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "prevDoc"]);
+        });
+        //题支的编辑器预览
+        $('.formulaEditTiZhi').keyup(function() {
+            $('#prevTiZhiDoc').html($('.formulaEditTiZhi').val());
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "prevTiZhiDoc"]);
+        });
+        //题目解析的编辑器预览
+        $('.formulaEditJieXi').keyup(function () {
+          var tgCont = $('.formulaEditJieXi').val();
+          tgCont = tgCont.replace(/\n/g, '<br/>');
+          $('#prevJieXiDoc').html(tgCont);
+          MathJax.Hub.Queue(["Typeset", MathJax.Hub, "prevJieXiDoc"]);
+        });
+        function matheq_preview() {
+            $('#prevDoc').html($('.formulaEditTiGan').val());
+            $('#prevTiZhiDoc').html($('.formulaEditTiZhi').val());
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "prevDoc"]);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, "prevTiZhiDoc"]);
+        }
+    </script>
+</div>

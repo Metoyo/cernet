@@ -1,0 +1,24 @@
+<div class="sub-nav">
+    <ul class="nav nav-tabs" ng-hide="isTjDetailShow">
+        <li ng-class="{active: tj_tabActive == 'kaoshiTj'}">
+            <a href="javascript:void(0)" ng-click="showKaoShiTjList()">
+                按考试统计
+            </a>
+        </li>
+        <li ng-class="{active: tj_tabActive == 'shijuanTj'}">
+            <a href="javascript:void(0)" ng-click="showShiJuanTjList()">
+                按试卷统计
+            </a>
+        </li>
+    </ul>
+    <h2 class="tj-title" ng-show="isTjDetailShow">
+        <span ng-bind="tjItemName"></span>
+        <span class="ml10 tjt-avg-score">平均分：<strong ng-bind="myAvgScore"></strong></span>
+        <button class="btn btn-danger pull-right" ng-click="tjDetailToList()">返回</button>
+    </h2>
+</div>
+<!-- 统计的容器 开始-->
+<div class="tab-content" ng-include="tjSubTpl">
+
+</div>
+<!-- 统计的容器 结束-->

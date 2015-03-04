@@ -1,0 +1,33 @@
+<div class="fix-to-top-right" ng-hide="isShenHeBox">
+    <button type="button" class="btn btn-danger" ng-click="closeShenheBox()">
+        返回
+    </button>
+</div>
+<div class="col-md-3 logoutInfo">
+    <h2>
+        您好，{{session.info.YONGHUMING}}
+        <span class="hide userUID">{{UID}}</span>
+    </h2>
+    <h4>
+        <a type="button" href="javascript:void(0)" ng-click="signOut()" class="btn btn-success">注销</a>
+    </h4>
+    <h4>
+        <a href="javascript:void(0)" ng-click="setPermissions()" class="btn btn-primary"> 权限审批 </a>
+    </h4>
+</div>
+<div class="col-md-9 entries" ng-show="isShenHeBox">
+    <h4>请选择您要进行的操作：</h4>
+    <ul class="list-unstyled">
+        <li>
+            <a href="javascript:void(0)" class="btn btn-primary" ng-click="renderLingYuSelectTpl()">学校科目选择</a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" class="btn btn-primary" ng-click="renderTiXingSelectTpl()">科目题型选择</a>
+        </li>
+    </ul>
+</div>
+<!-- 审核权限开始  -->
+<div class="shenheBox" ng-class="{row:isShenHeBox, 'col-md-9':!isShenHeBox}" ng-include="adminSubWebTpl">
+
+</div>
+<!-- 审核权限结束  -->

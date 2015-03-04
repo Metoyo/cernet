@@ -1,0 +1,111 @@
+<h4 class="admin-title">
+    <span>公共知识大纲</span>
+    <a href="javascript:void(0)" ng-click="selected_dg='';addNewPubDaGang()" ng-show="selected_ly">新增</a>
+</h4>
+<div class="dagangInput setDaGangBox">
+    <div class="row admin-row">
+        <div class="col-md-6">
+            <select class="form-control daGangLySelect" ng-model="selected_ly" ng-change="getPubDaGangList(selected_ly)"
+                    ng-options="ly.LINGYU_ID as ly.LINGYUMINGCHENG for ly in lingYuChild">
+                <option value="">请选择领域</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <select class="form-control daGangListSelect" ng-model="adminParams.selected_dg"
+                    ng-change="getPubDgZsdData(adminParams.selected_dg)"
+                    ng-options="dg.ZHISHIDAGANG_ID as dg.ZHISHIDAGANGMINGCHENG for dg in pubDaGangList">
+                <option value="">请选择大纲</option>
+            </select>
+        </div>
+    </div>
+    <div ng-repeat="zsd in dgZsdList" class="media dagangBox dgLevel_0">
+        <div class="media-body">
+            <div class="media-heading">
+                <div class="input-group col-md-6">
+                    <input type="text" class="form-control" ng-model="zsd.ZHISHIDIANMINGCHENG"
+                           ng-focus="getInputIndex($event, zsd)" ng-blur="compareInputVal(zsd)">
+                    <span class="input-group-btn">
+                         <button class="btn btn-default dgAddBtn" ng-click="dgAddNd(zsd)" type="button">
+                             <span class="glyphicon glyphicon-plus"> </span>
+                         </button>
+                    </span>
+                </div>
+            </div>
+            <!-- 二级 -->
+            <div ng-repeat="nd1 in zsd.ZIJIEDIAN" class="media dgLevel_1">
+                <a class="media-object pull-left"></a>
+                <div class="media-body">
+                    <div class="media-heading">
+                        <div class="input-group col-md-6">
+                            <input type="text" class="form-control" ng-model="nd1.ZHISHIDIANMINGCHENG"
+                                   ng-focus="getInputIndex($event, nd1)" ng-blur="compareInputVal(nd1)">
+                            <span class="input-group-btn">
+                                 <button class="btn btn-default dgAddBtn dgAddBtn_1" ng-click="dgAddNd(nd1)" type="button">
+                                     <span class="glyphicon glyphicon-plus"> </span>
+                                 </button>
+                                 <button class="btn btn-default dgDeleteBtn" type="button"
+                                         ng-click="dgRemoveNd(zsd, nd1, $index)">
+                                     <span class="glyphicon glyphicon-trash"> </span>
+                                 </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- 三级 -->
+                    <div ng-repeat="nd2 in nd1.ZIJIEDIAN" class="media dgLevel_2">
+                        <a class="media-object pull-left"></a>
+                        <div class="media-body">
+                            <div class="media-heading">
+                                <div class="input-group col-md-6">
+                                    <input type="text" class="form-control" ng-model="nd2.ZHISHIDIANMINGCHENG"
+                                           ng-focus="getInputIndex($event, nd2)" ng-blur="compareInputVal(nd2)">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default dgAddBtn dgAddBtn_2" ng-click="dgAddNd(nd2)"
+                                                type="button">
+                                            <span class="glyphicon glyphicon-plus"> </span>
+                                        </button>
+                                         <button class="btn btn-default dgDeleteBtn" type="button"
+                                                 ng-click="dgRemoveNd(nd1, nd2, $index)">
+                                             <span class="glyphicon glyphicon-trash"> </span>
+                                         </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- 四级 -->
+                            <div ng-repeat="nd3 in nd2.ZIJIEDIAN" class="media dgLevel_3">
+                                <a class="media-object pull-left"> </a>
+                                <div class="media-body">
+                                    <div class="media-heading">
+                                        <div class="input-group col-md-6">
+                                            <input type="text" class="form-control" ng-model="nd3.ZHISHIDIANMINGCHENG"
+                                                   ng-focus="getInputIndex($event, nd3)" ng-blur="compareInputVal()">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default dgDeleteBtn"
+                                                        ng-click="dgRemoveNd(nd2, nd3, $index)" type="button">
+                                                    <span class="glyphicon glyphicon-trash"> </span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="publicKnowledgeBox" ng-show="publicKnowledge.length">
+        <h4><strong>已有知识点:</strong></h4>
+        <div class="publicKnowledge">
+            <p ng-repeat="zsd in publicKnowledge" title="点击加入到知识大纲">
+                <span ng-bind="zsd.ZHISHIDIANMINGCHENG"  ng-click="addToDaGang(zsd, $index)"></span>
+                <!--<span class="glyphicon glyphicon-remove clRed pull-right"-->
+                <!--ng-click="deletePubDgZsd(zsd.ZHISHIDIAN_ID, $index)"></span>-->
+            </p>
+        </div>
+    </div>
+</div>
+<div class="save-box">
+    <button class="btn btn-primary" ng-click="deletePublicDaGang()" ng-show="adminParams.selected_dg">删除</button>
+    <button class="btn btn-primary" ng-click="saveDaGangData()" ng-disabled="adminParams.saveDGBtnDisabled">保存</button>
+</div>

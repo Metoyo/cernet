@@ -1,0 +1,126 @@
+<div class="col-md-12 infoBox">
+    <h3 class="text-center shTitle"> 权限审批
+        <a href="javascript:void(0)" ng-click="closeShenheBox()" class="closeShenBox pull-right"
+           title="关闭审核窗口">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>
+    </h3>
+    <ul class="nav nav-tabs" ng-init="tabActive = 'daishenhe'">
+        <li class="ml10" ng-class="{active: tabActive == 'daishenhe' }">
+            <a href="javascript:void(0)" ng-click="tabActive = 'daishenhe'">
+                待审核
+            </a>
+        </li>
+        <li ng-class="{active: tabActive == 'weishenhe'}">
+            <a href="javascript:void(0)" ng-click="tabActive = 'weishenhe'">
+                已审核
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane" ng-class="{active: tabActive == 'daishenhe' }">
+            <table class="table table-bordered shenheTable">
+                <thead>
+                <tr>
+                    <th>科目</th>
+                    <th>姓名</th>
+                    <th>角色</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody class="shenheList">
+                <tr ng-repeat="SH in notShenHeList">
+                    <td>
+                        {{SH.LINGYUMINGCHENG}}
+                            <span class="shYonghuId">
+                                {{SH.UID}}
+                            </span>
+                            <span class="shJigouId">
+                                {{SH.JIGOU_ID}}
+                            </span>
+                            <span class="shLingyuId">
+                                {{SH.LINGYU_ID}}
+                            </span>
+                    </td>
+                    <td>
+                        {{SH.XINGMING}}
+                    </td>
+                    <td class="text-left">
+                        <div class="shenheJueseList">
+                            <label ng-repeat="JS in SH.JUESE" class="checkbox-inline">
+                                    <span class="originZT">
+                                        {{JS.ZHUANGTAI}}
+                                    </span>
+                                <input type="checkbox" name="rightName" ng-click="jueseClicked(SH,JS)"
+                                       ng-model="JS.JUESE_CHECKED" />
+                                    <span>
+                                        {{JS.JUESEMINGCHENG}}
+                                    </span>
+                            </label>
+                        </div>
+                    </td>
+                    <td class="passBtn">
+                        <button type="button" ng-click="authPerm(SH)" ng-hide="SH.AUTH_BTN_HIDE"
+                                class="btn btn-success">
+                            通过审批
+                        </button>
+                        <span class="shMsgBox" ng-show="SH.AUTH_BTN_HIDE">已通过审批</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" ng-class="{active: tabActive == 'weishenhe'}">
+            <table class="table table-bordered shenheTable">
+                <thead>
+                <tr>
+                    <th>科目</th>
+                    <th>姓名</th>
+                    <th>角色</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody class="shenheList">
+                <tr ng-repeat="SH in hasShenHeList">
+                    <td>
+                        {{SH.LINGYUMINGCHENG}}
+                                <span class="shYonghuId">
+                                    {{SH.UID}}
+                                </span>
+                                <span class="shJigouId">
+                                    {{SH.JIGOU_ID}}
+                                </span>
+                                <span class="shLingyuId">
+                                    {{SH.LINGYU_ID}}
+                                </span>
+                    </td>
+                    <td>
+                        {{SH.XINGMING}}
+                    </td>
+                    <td class="text-left">
+                        <div class="shenheJueseList">
+                            <label ng-repeat="JS in SH.JUESE" class="checkbox-inline">
+                                        <span class="originZT">
+                                            {{JS.ZHUANGTAI}}
+                                        </span>
+                                <input type="checkbox" name="rightName" ng-click="jueseClicked(SH,JS)"
+                                       ng-model="JS.JUESE_CHECKED" />
+                                        <span>
+                                            {{JS.JUESEMINGCHENG}}
+                                        </span>
+                            </label>
+                        </div>
+                    </td>
+                    <td class="passBtn">
+                        <button type="button" ng-click="authPerm(SH)" ng-hide="SH.AUTH_BTN_HIDE"
+                                class="btn btn-success">
+                            通过审批
+                        </button>
+                        <span class="shMsgBox" ng-show="SH.AUTH_BTN_HIDE">已通过审批</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

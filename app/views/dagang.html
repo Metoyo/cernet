@@ -1,0 +1,75 @@
+<div class="innerWrap dagangWrapper">
+    <div class="dagangListWrap">
+        <h2 class="logo pull-left"><img src="/images/mingti/icon/logo.png" alt=""/></h2>
+        <div class="keMuName">
+            <h2>科目名称：</h2>
+            <p ng-bind="session.defaultLyName" class="keMuNameDetail"></p>
+        </div>
+        <div class="selectedDgName">
+            <h2>题库默认大纲：</h2>
+            <p ng-bind="defaultDaGang ? defaultDaGang : ''"></p>
+        </div>
+    </div>
+    <div class="content">
+        <div class="back-home-box">
+            <button class="btn btn-danger" ng-click="backToDaGangHome();daGangParam.showDaGangAsNew = false" ng-show="isPrivateDg || isPublicDg">
+                返回大纲首页
+            </button>
+        </div>
+        <div class="save-box">
+            <button class="btn btn-primary" ng-click="daGangParam.showDaGangAsNew = true" ng-show="isPrivateDg || isPublicDg"
+                    ng-disabled="!daGangParam.selected_dg">
+                大纲另存
+            </button>
+            <button class="btn btn-primary" ng-click="deleteDaGang()" ng-show="selectZjDgId">
+                删除大纲
+            </button>
+            <button class="btn btn-primary" ng-click="saveZjDaGangData()" ng-show="isPrivateDg"
+                    ng-disabled="prDgBtnDisabled">
+                保存大纲
+            </button>
+            <button class="btn btn-primary" ng-click="saveZjDaGangData(true)" ng-show="isPrivateDg"
+                    ng-disabled="prDgBtnDisabled">
+                用作默认大纲
+            </button>
+            <button class="btn btn-primary" ng-click="makeDaGangAsDefault()" ng-show="isPublicDg"
+                    ng-disabled="!daGangParam.selected_dg">
+                用作默认大纲
+            </button>
+        </div>
+        <div class="row pt10 dagangInput" ng-init="dgTpl = 'views/partials/daGangHome.html'" ng-include="dgTpl">
+
+        </div>
+        <div class="popup-gray-box" ng-show="daGangParam.showDaGangAsNew">
+            <div class="popup-gray-box-inner">
+                <div class="innerBox">
+                    <table class="table changePsw">
+                        <tr>
+                            <td>新大纲名称</td>
+                            <td>
+                                <input type="text" class="form-control" ng-model="daGangParam.dgSaveAsName"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="button" class="btn btn-primary pull-left"
+                                        ng-click="saveDaGangAsNew()">保存新大纲</button>
+                                <button type="button" class="btn btn-danger pull-right"
+                                        ng-click="daGangParam.showDaGangAsNew = false">关闭</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="/bower_components/markitup/MathJax.js?config=TeX-AMS_HTML-full"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["#$", "$#"]], displayMath: [['#$$','$$#']]},
+        messageStyle: "none",
+        showMathMenu: false,
+        processEscapes: true
+      });
+    </script>
+</div>

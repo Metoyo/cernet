@@ -1,0 +1,40 @@
+<div  id="testList1">
+    <div class="tm-err-rate" ng-repeat="tm in tjTiMuDetail track by $index | limitTo:tjTmQuantity" repeat-done>
+        <ul class="tm-err-rate-info">
+            <li>作答人数 <span ng-bind="tm.DTRS"></span></li>
+            <li>答对人数 <span ng-bind="tm.DDRS"></span></li>
+            <li>失分率 <span ng-bind="tm.SHIFENLV"></span></li>
+        </ul>
+        <div class="tm-err-rate-cont" bn-slide-show slide-show-target="answer-cont" title="显示答案">
+            <div ng-bind-html="tm.TIGAN.tiGan"></div>
+            <div class="item-tizhi-wrap">
+                <p class="item-tizhi" ng-repeat="tz in tm.TIGAN.tiZhiNeiRong track by $index">
+                    <span ng-cloak>{{'(' + letterArr[$index] + ')'}}</span>
+                    <span class="tiZhiSpan" ng-bind-html="tz"></span>
+                </p>
+            </div>
+        </div>
+        <div class="answer-cont">
+            <span class="daAnLabel">答案：</span>
+            <div class="daAnBox" ng-bind-html="tm.DAAN"></div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center" ng-hide="tjTiMuDetail.length <= tjTmQuantity">
+    <button type="button" class="btn btn-primary" ng-click="showTjSjMoreDetail()">显示更多</button>
+</div>
+<button type="button" class="hide reloadMath">点我</button> <!--用于刷新函数-->
+<script type="text/javascript" src="bower_components/markitup/MathJax.js?config=TeX-AMS_HTML-full"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["#$", "$#"]], displayMath: [['#$$','$$#']]},
+    messageStyle: "none",
+    showMathMenu: false,processEscapes: true
+  });
+</script>
+<script type="text/javascript">
+    $('.reloadMath').on('click', function(){
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "testList1"]);
+    });
+</script>

@@ -1,0 +1,101 @@
+<div class="loading-box text-center" ng-show="loadingImgShow">
+    <img src="/images/loading.gif" alt="" width="64" height="64"/>
+    <p>数据加载中，请耐心等待……</p>
+</div>
+<div class="row ruleMakePaper-header">
+    <table>
+        <tr>
+            <th>题型</th>
+            <th width="80px">数量</th>
+            <th width="300px">难度</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>
+                <select class="form-control ruleMakePaperSelectId" ng-model="ruleMakePaperTx.selectTx"
+                        ng-change="rmpGetTxId(ruleMakePaperTx.selectTx)"
+                        ng-options="tx.TIXING_ID as tx.TIXINGMINGCHENG for tx in kmtxList">
+                    <option value="">请选择</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" class="form-control txNum" maxlength="3"
+                       onkeyup="this.value=this.value.replace(/\D/g,'')"
+                       onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+            </td>
+            <td class="nandu-dist">
+                <ul class="list-unstyled zj-style-star" ng-class="zjNaDuStar">
+                    <li><a href="javascript:void(0)" ng-click="zjNanDuSelect(1)"></a></li>
+                    <li><a href="javascript:void(0)" ng-click="zjNanDuSelect(2)"></a></li>
+                    <li><a href="javascript:void(0)" ng-click="zjNanDuSelect(3)"></a></li>
+                    <li><a href="javascript:void(0)" ng-click="zjNanDuSelect(4)"></a></li>
+                    <li><a href="javascript:void(0)" ng-click="zjNanDuSelect(5)"></a></li>
+                </ul>
+            </td>
+            <td class="text-right">
+                <button type="button" class="btn btn-primary" ng-click="addRuleCondition()">
+                    添加规则
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="ruleBackToZuJuanHome()">
+                    返回
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="row ruleMakePaper-body">
+    <div ng-repeat="txw in ampKmtxWeb" ng-show="txw.zsdXuanTiArr.length">
+        <h4><span ng-bind="txw.TIXINGMINGCHENG"></span>
+            <span class="txTotalNum">共<strong ng-bind="txw.txTotalNum"></strong>题</span>
+        </h4>
+        <table>
+            <tr>
+                <th width="70%">知识点</th>
+                <th width="10%">数量</th>
+                <th width="10%">难度</th>
+                <th>删除</th>
+            </tr>
+            <tr ng-repeat="xttj in txw.zsdXuanTiArr track by $index">
+                <td hover-slide hover-slide-target="zsdPreview" hover-slide-getval="font-cut"
+                    hover-slide-setval="zsdPreviewInner">
+                    <input type="text" value="{{xttj.zsdNameArr.join('；')}}" disabled class="font-cut">
+                </td>
+                <td ng-bind="xttj.TIXING[0].COUNT"></td>
+                <td ng-bind="xttj.NANDU * 5"></td>
+                <td>
+                    <span class="glyphicon glyphicon-trash" ng-click="deleteRuleCondition(txw, $index)"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="zsdPreview">
+    <div class="zsdPreviewInner">
+
+    </div>
+</div>
+<div class="row fixed-bottom">
+    <!--<label class="checkbox-inline">-->
+        <!--<input type="checkbox" value="" ng-model="isTiMuQuChong">题目去重（一年）-->
+    <!--</label>-->
+    <table>
+        <tr>
+            <td>
+                <select ng-model="zuJuanParam.selectQuChongNum" class="form-control w200 h28 mr5"
+                        ng-change="checkSelectQuChongNum()"
+                        ng-options="qct.qcTime as qct.qcName for qct in zuJuanParam.quChong">
+                    <option value="">请选择题目去重年限</option>
+                </select>
+            </td>
+            <td>
+                或输入
+                <input type="text" ng-model="zuJuanParam.inputQuChongNum" placeholder="年限" class="w80 mr5 h28"
+                       ng-keyup="checkInPutQuChongNum()" onafterpaste="if(isNaN(value))execCommand('undo')">
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" ng-click="addRuleMakePaperShiJuan()"
+                        ng-disabled="ruleMakePaperSaveBtnDisabled">生成试卷</button>
+            </td>
+        </tr>
+    </table>
+</div>

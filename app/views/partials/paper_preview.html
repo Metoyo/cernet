@@ -1,0 +1,227 @@
+<div class="paper-content">
+    <div class="loading-box text-center" ng-show="loadingImgShow">
+        <img src="/images/loading.gif" alt="" width="64" height="64"/>
+        <p>数据加载中，请耐心等待……</p>
+    </div>
+    <div class="back-to-paper-list">
+        <button type="button" class="btn btn-danger" ng-click="showZuJuan()"
+                ng-show="shijuanData.shuju.SHIJUAN_ID">返回试卷列表</button>
+        <button type="button" class="btn btn-danger" ng-click="dropMakePaper()"
+                ng-show="baocunshijuanBtn && !shijuanData.shuju.SHIJUAN_ID">
+            放弃本次组卷
+        </button>
+    </div>
+    <form name="shijuan">
+        <h1 class="paper-title text-center hover-style" title="点击设置">
+            <span class="sj-param-val" ng-click="editMuBanDaTiNameAndScore('sj_dt_input')">
+                {{ shijuanData.shuju.SHIJUANMINGCHENG || '点击设置试卷名称'}}
+            </span>
+        </h1>
+        <h1 class="paper-sub-title text-center hover-style" title="点击设置" ng-show="shijuanData.shuju.FUBIAOTI">
+            <span class="sj-param-val" ng-click="editMuBanDaTiNameAndScore('sj_fbt_input')">
+                {{ shijuanData.shuju.FUBIAOTI}}
+            </span>
+        </h1>
+        <div class="attention hover-style" title="点击设置" ng-show="mubanData.shuju.ZONGDAOYU">
+            <span class="sj-param-val" ng-click="editMuBanDaTiNameAndScore('sj_dy_input')">
+                {{ mubanData.shuju.ZONGDAOYU }}
+            </span>
+        </div>
+        <div class="form-paper-type text-center" ng-hide="sjPreview">
+            <button type="button" class="btn btn-primary" ng-click="handMakePaper()">手动组卷</button>
+            <!--<button type="button" class="btn btn-primary" ng-click="autoMakePaper()">自动组卷</button>-->
+            <button type="button" class="btn btn-primary" ng-click="ruleMakePaper()">规则组卷</button>
+        </div>
+        <button type="button" class="hide reloadMath">点我</button> <!--用于刷新函数-->
+        <div class="shijuantimu-list" ng-show="sjPreview" id="testList">
+            <div ng-repeat="mbdt in mubanData.shuju.MUBANDATI" repeat-done>
+                <div class="mubandati">
+                    <div class="dati-name-box" title="点击设置大题名称"
+                         ng-click="editMuBanDaTiNameAndScore('dt_name' + $index)">
+                        <span>{{cnNumArr[$index]}}、</span>
+                        <span class="dati-name">{{mbdt.DATIMINGCHENG}}</span>
+                    </div>
+                    <div class="dati-score-box" title="点击设置大题分数"
+                         ng-click="editMuBanDaTiNameAndScore('dt_score' + $index)">
+                        <p>
+                            <span>（本大题共</span>
+                            <span class="xiaoti-total"> {{mbdt.TIMUARR.length}} </span>
+                            <span>小题，</span>
+                        </p>
+                        <p ng-hide="mbdt.datiScore">
+                            <a href="javascript:void(0)">点击设置本大题分数</a><span>）</span>
+                        </p>
+                        <p ng-show="mbdt.datiScore">
+                            <span>共</span>
+                            <span class="dati-total-score" ng-bind="mbdt.datiScore >= 0 ? mbdt.datiScore : 'X'">
+                            </span>
+                            <span>分）</span>
+                        </p>
+                    </div>
+                </div>
+                <ul class="list-unstyled testList">
+                    <li ng-repeat="tmd in mbdt.TIMUARR">
+                        <h5 class="item-title text-right">
+                            <button type="button" class="btn btn-default" ng-click="removeOutPaper(tmd)">删除</button>
+                            <button type="button" class="btn btn-primary"
+                                    ng-click="changeItem(mbdt.MUBANDATI_ID, tmd.TIMU_ID)">换一题</button>
+                            <button type="button" class="btn btn-default" ng-click="moveTM(tmd,-1)" ng-hide="$first">上移</button>
+                            <button type="button" class="btn btn-default" ng-click="moveTM(tmd,1)" ng-hide="$last">下移</button>
+                        </h5>
+                        <div class="item-cont">
+                            <h3 class="item-tigan" title="点击设置" ng-init="sj_item_score = true">
+                                <div class="item-score" ng-click="sj_item_score = false">
+                                    <span ng-bind-html="($index + 1) + '、' + tmd.TIGAN.tiGan | outTiGan:tm.TIXING_ID"></span>
+                                    <span ng-hide="tmd.xiaotiScore">
+                                       （<a href="javascript:void(0)">点击设置本小题分数</a>）
+                                    </span>
+                                    <span ng-show="tmd.xiaotiScore">
+                                        {{'（本小题' + (tmd.xiaotiScore >= 0 ? tmd.xiaotiScore : 'X') + '分）'}}
+                                    </span>
+                                </div>
+                                <div class="sj-edit-box" ng-hide="sj_item_score">
+                                    <div class="sj-edit-box-inner">
+                                        <input type="text" ng-model="tmd.xiaotiScore" autofocus="true"
+                                               placeholder="此小题分数" maxlength="4" class="form-control xiaoTiScoreInput"
+                                               onkeyup="if(isNaN(value))execCommand('undo')"
+                                               onafterpaste="if(isNaN(value))execCommand('undo')"/>
+                                        <button type="button" class="btn btn-primary"
+                                                ng-click="addXiaotiScore(mbdt); sj_item_score = true">确定</button>
+                                        <button type="button" class="btn btn-danger"
+                                                ng-click="sj_item_score = true; tmd.xiaotiScore = ''">取消</button>
+                                    </div>
+                                </div>
+                            </h3>
+                            <div class="item-tizhi-wrap">
+                                <p class="item-tizhi" ng-repeat="tz in tmd.TIGAN.tiZhiNeiRong track by $index"
+                                   ng-bind-html="'(' + letterArr[$index] + ') ' + tz">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="write-answer-region" ng-show="tmd.TIMULEIXING_ID == 9">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--弹出层用来修改题目和大题的信息-->
+        <div class="sj-edit-box" ng-show="shijuan_edit">
+            <div class="sj-edit-box-inner">
+                <h2 class="sj-setting-title">
+                    <span>试卷设置</span>
+                </h2>
+                <div class="setting-content text-left">
+                    <div class="paper-info-edit">
+                        <div class="row">
+                            <label>试卷主标题：</label>
+                            <input type="text" class="form-control sj_dt_input"
+                                   ng-model="shijuanData.shuju.SHIJUANMINGCHENG" placeholder="试卷名称"/>
+                        </div>
+                        <div class="row showAddFuBiaoTi" ng-init="showAddFuBiaoTi = false">
+                            <a href ng-click="showAddFuBiaoTi = !showAddFuBiaoTi" ng-hide="showAddFuBiaoTi">
+                                <span class="glyphicon glyphicon-plus"></span>增加副标题
+                            </a>
+                            <a href ng-click="showAddFuBiaoTi = !showAddFuBiaoTi; shijuanData.shuju.FUBIAOTI = ''"
+                               ng-show="showAddFuBiaoTi">
+                                <span class="glyphicon glyphicon-plus"></span>取消副标题
+                            </a>
+                        </div>
+                        <div class="row" ng-show="showAddFuBiaoTi">
+                            <input type="text" ng-model="shijuanData.shuju.FUBIAOTI" placeholder="试卷副标题"
+                                   class="form-control sj_fbt_input"/>
+                        </div>
+                        <div class="row showAddFuBiaoTi" ng-init="showAddDaoYu = false">
+                            <a href ng-click="showAddDaoYu = !showAddDaoYu" ng-hide="showAddDaoYu">
+                                <span class="glyphicon glyphicon-plus"></span>增加导语
+                            </a>
+                            <a href ng-click="showAddDaoYu = !showAddDaoYu; mubanData.shuju.ZONGDAOYU = ''"
+                               ng-show="showAddDaoYu">
+                                <span class="glyphicon glyphicon-plus"></span>取消导语
+                            </a>
+                        </div>
+                        <div class="row mt5" ng-show="showAddDaoYu">
+                            <label>导语：</label>
+                            <textarea ng-model="mubanData.shuju.ZONGDAOYU" rows="5"  placeholder="导语"
+                                      class="form-control sj_dy_input">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="item-info-edit">
+                        <div class="row mt5">
+                            <label>大题：</label>
+                        </div>
+                        <div class="row" ng-repeat="mbdt in mubanData.shuju.MUBANDATI">
+                            <div class="col-sm-9 dati-box">
+                                <span>{{cnNumArr[$index]}}、</span>
+                                <input type="text" ng-model="mbdt.DATIMINGCHENG" placeholder="此大题名称"
+                                       class="form-control {{'dt_name' + $index}}"/>
+                            </div>
+                            <div class="col-sm-3 fenshu-box">
+                                <span>分数：</span>
+                                <input type="text" ng-model="mbdt.datiScore"  placeholder="此大题分数" maxlength="5"
+                                       class="form-control {{'dt_score' + $index}}"
+                                       onkeyup="if(isNaN(value))execCommand('undo')"
+                                       onafterpaste="if(isNaN(value))execCommand('undo')"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit-edit-info">
+                    <button type="button" class="btn btn-primary"
+                            ng-click="saveEditPaper()">确定</button>
+                    <button type="button" class="btn btn-danger"
+                            ng-click="cancelEditPaper()">取消</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="sj-edit-box" ng-show="isSavePaperConfirm">
+        <div class="sj-edit-box-inner">
+            <table class="table-bordered paperConfirmTable">
+                <tr>
+                    <th>题型</th>
+                    <th>数量</th>
+                    <th>分数</th>
+                </tr>
+                <tr ng-repeat="mbdtInfo in mubanData.shuju.MUBANDATI track by $index">
+                    <td ng-bind="mbdtInfo.DATIMINGCHENG"></td>
+                    <td ng-bind="mbdtInfo.TIMUARR.length"></td>
+                    <td ng-bind="mbdtInfo.datiScore"></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        总分：{{paperScore}}分
+                    </td>
+                </tr>
+            </table>
+            <div class="btnBox">
+                <button type="button" class="btn btn-primary" ng-click="savePaper()">确定</button>
+                <button type="button" class="btn btn-danger" ng-click="cancelSavePaper()">取消</button>
+            </div>
+        </div>
+    </div>
+    <div class="save-paper-box" ng-show="baocunshijuanBtn">
+        <!--<button type="button" class="btn btn-primary" ng-click="setDaTiKa()"-->
+                <!--ng-show="shijuanData.shuju.SHIJUAN_ID">答题卡设置</button>-->
+        <label>
+            <input type="checkbox" ng-model="zuJuanParam.tiMuSuiJi"> 题目随机排序
+        </label>
+        <label>
+            <input type="checkbox" ng-model="zuJuanParam.xuanXiangSuiJi"> 选项随机排序
+        </label>
+        <button type="button" class="btn btn-primary" ng-click="savePaperConfirm()">保存试卷</button>
+    </div>
+</div>
+<script type="text/javascript" src="bower_components/markitup/MathJax.js?config=TeX-AMS_HTML-full"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["#$", "$#"]], displayMath: [['#$$','$$#']]},
+    messageStyle: "none",
+    showMathMenu: false,processEscapes: true
+  });
+</script>
+<script type="text/javascript">
+    $('.reloadMath').on('click', function(){
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "testList"]);
+    });
+</script>

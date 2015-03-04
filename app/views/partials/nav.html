@@ -1,0 +1,220 @@
+<div class="container" ng-controller="NavCtrl">
+    <div class="userInfo">
+        <a href="javascript:void(0)" ng-bind="session.userInfo.YONGHUMING" ng-click="showUserInfo()">
+        </a>
+        <!--<a href="/logout">退出</a>-->
+        <a href="javascript:void(0)" ng-click="signOut()">退出</a>
+        <a href="/lingyu" ng-show="session.info.LINGYU > 1">修改默认科目</a>
+    </div>
+    <ul class="list-group nav-list">
+        <li class="list-group-item" ng-class="navClass('dagang')"
+            ng-show="session.quanxianStr.indexOf('dagang')>=0">
+            <a href="/dagang" class="dropdownToggle droTogDg">
+                <span class="nav-icon"></span> <span class="nav-name">大纲</span>
+            </a>
+        </li>
+        <li class="list-group-item" ng-class="navClass('mingti')"
+            ng-show="session.quanxianStr.indexOf('mingti')>=0">
+            <a href="/mingti" class="dropdownToggle droTogMt">
+                <span class="nav-icon"></span> <span class="nav-name">命题</span>
+            </a>
+        </li>
+        <li class="list-group-item" ng-class="navClass('zujuan')"
+            ng-show="session.quanxianStr.indexOf('zujuan')>=0">
+            <a href="/zujuan" class="dropdownToggle droTogZj">
+                <span class="nav-icon"></span> <span class="nav-name">组卷</span>
+            </a>
+        </li>
+        <li class="list-group-item" ng-class="navClass('kaowu')"
+            ng-show="session.quanxianStr.indexOf('kaowu')>=0">
+            <a href="/kaowu" class="dropdownToggle droTogKw">
+                <span class="nav-icon"></span> <span class="nav-name">考务</span>
+            </a>
+        </li>
+        <!--<li class="list-group-item" ng-class="navClass('shenpi')"-->
+            <!--ng-show="session.quanxianStr.indexOf('juese3')>=0">-->
+            <!--<a href="javascript:void(0)" class="dropdownToggle droTogSp">-->
+                <!--<span class="nav-icon"></span> <span class="nav-name">审批</span>-->
+            <!--</a>-->
+        <!--</li>-->
+        <li class="list-group-item" ng-class="navClass('tongji')"
+            ng-show="session.quanxianStr.indexOf('tongji')>=0">
+            <a  href="/tongji" class="dropdownToggle droTogTj">
+                <span class="nav-icon"></span> <span class="nav-name">统计</span>
+            </a>
+        </li>
+    </ul>
+    <div class="dsfoldBox">
+        <a href="javascript:void(0)" class="dsfoldBtn" ng-click="dsfoldBtn()"> </a>
+    </div>
+    <!-- 显示个人信息的页面 -->
+    <div class="popup-gray-box" ng-show="userInfoLayer">
+        <div class="popup-gray-box-inner">
+            <div class="innerBox">
+                <div class="pin-right-top">
+                    <button type="button" class="btn btn-danger" ng-click="closeUserInfoLayer()">关闭</button>
+                </div>
+                <table class="table changePsw">
+                    <tr>
+                        <td>
+                            系统账号
+                        </td>
+                        <td>
+                            {{usr.YONGHUMING}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            真实姓名
+                        </td>
+                        <td>
+                            {{usr.XINGMING}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            邮箱
+                        </td>
+                        <td>
+                            {{usr.YOUXIANG}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            手机
+                        </td>
+                        <td>
+                            {{usr.SHOUJI}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-bottom: 20px">
+                            单位
+                        </td>
+                        <td>
+                            {{usr.JIGOUMINGCHENG}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            修改密码
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="padding-bottom: 20px">
+                            新密码
+                        </td>
+                        <td>
+                            <input type="text" class="newPassWord" ng-model="navData.newPsd">
+                            <button type="button" class="btn btn-primary" ng-click="modifyPassWord()"
+                                    ng-disabled="!navData.newPsd">修改</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="modifuMiMaInfo clRed">
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            科目
+                        </th>
+                        <th>
+                            职务
+                        </th>
+                    </tr>
+                    <tr ng-repeat="ly in usr.LINGYU">
+                        <td>
+                            {{ly.LINGYUMINGCHENG}}
+                        </td>
+                        <td>
+                            {{ly.jueseStr}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            添加学科领域
+                        </th>
+                        <th>
+                            <button type="button" class="btn btn-primary pull-right" ng-click="saveNewLingYu()">
+                                保存新增学科领域
+                            </button>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            选择领域
+                        </td>
+                        <td>
+                            <select class="form-control myField" ng-model="navData.select_ly"
+                                    ng-change="getKemuList(navData.select_ly)"
+                                    ng-options="ly.LINGYU_ID as ly.LINGYUMINGCHENG for ly in lingYuList">
+                                <option value="">请选择</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>新添科目</td>
+                        <td>
+                            <div class="selectedObjectBox">
+                                <div class="selectedObjectList pull-left wp100 bdb mb10" ng-repeat="oar in objAndRight">
+                                    <div class="pull-left">
+                                        <p class="kemumingcheng">
+                                            <span>科目：</span>
+                                            <span class="objectName">{{oar.lingyu[0].LINGYUMINGCHENG}}</span>
+                                        </p>
+                                        <p class="kemuquanxian">
+                                            <span>职务：</span>
+                                            <span class="rightName">{{oar.juese.jueseName.toString()}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="btn-can pull-right">
+                                        <a href="javascript:void(0)" ng-click="delSelectedObject($index)">
+                                            <span class="glyphicon glyphicon-remove-circle"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="110px">科目和职位</td>
+                        <td>
+                            <div ng-show="kemu_list.length">
+                                <div class="form-group col-md-12">
+                                    <label>科目</label>
+                                    <div class="chooseObject">
+                                        <label class="radio-inline" ng-repeat="km in kemu_list">
+                                            <input type="radio" name="objectName" value="{{km.LINGYU_ID}}"
+                                                   ng-click="getLingYuVal($index)">
+                                            <span>{{km.LINGYUMINGCHENG}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>职务</label>
+                                    <div class="chooseRight">
+                                        <label class="checkbox-inline" ng-repeat="js in juese_list">
+                                            <input type="checkbox" name="rightName" value="{{js.JUESE_ID}}"
+                                                   ng-click="getJueSeArr($index)">
+                                            <span>{{js.JUESEMINGCHENG}}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 text-right">
+                                    <button type="button" class="btn btn-primary" ng-disabled="!linyuValue || !jueseValue"
+                                            ng-click="getObjectAndRight()">
+                                        添加
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

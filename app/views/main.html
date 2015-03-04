@@ -1,0 +1,126 @@
+<div class="innerWrap dagangWrapper">
+    <div class="dagangListWrap">
+        <h2 class="logo pull-left">
+            <img src="/images/mingti/icon/logo.png" alt="">
+        </h2>
+        <div class="pointTree">
+            <ul class="list-unstyled list-sheet">
+                <li ng-repeat="dg in dgList">
+                    <a href="javascript:void(0)" class="zsdg-btn" ng-click="loadKnowledge(dg)"
+                       data-gjdid="{{dg.GENJIEDIAN_ID}}" data-lyid="{{dg.LINGYU_ID}}"
+                       data-zsdid="{{dg.ZHISHIDAGANG_ID}}" data-leixing="{{dg.LEIXING}}">
+                        {{dg.ZHISHIDAGANGMINGCHENG}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div class="row content-title">
+            <div class="col-md-4 mt15">
+                <span class="itemTitle"> {{itemTitle}} </span>
+            </div>
+        </div>
+        <div class="row pt10 dagangInput">
+            <div class="dgInputWelcome" ng-show="dgWelcome">
+                <p>欢迎进入大纲页面，请选择左边的大纲！</p>
+            </div>
+            <form class="form-horizontal dagangInputForm">
+                <div ng-repeat="zsd in knowledge" class="media dagangBox dgLevel_0" data-jdId="{{zsd.JIEDIAN_ID}}"
+                     data-zsdId="{{zsd.ZHISHIDIAN_ID}}" data-jdxh="{{zsd.JIEDIANXUHAO}}"
+                     data-zsdlx="{{zsd.LEIXING}}" data-jdlx="{{zsd.JIEDIANLEIXING}}"
+                     data-zt="{{zsd.ZHUANGTAI}}">
+                    <div class="media-body">
+                        <div class="media-heading">
+                            <div class="col-md-4">
+                                <div class="form-control radius4 dagangName">
+                                    {{zsd.ZHISHIDIANMINGCHENG}}
+                                    <button class="btn btn-default dgAddBtn dgAddBtn_0" ng-click="addNd(zsd)" type="button">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 二级 -->
+                        <div ng-repeat="nd2 in zsd.ZIJIEDIAN" class="media dgLevel_1" data-jdId="{{nd2.JIEDIAN_ID}}"
+                             data-zsdId="{{nd2.ZHISHIDIAN_ID}}" data-jdxh="{{nd2.JIEDIANXUHAO}}"
+                             data-zsdlx="{{nd2.LEIXING}}" data-jdlx="{{nd2.JIEDIANLEIXING}}"
+                             data-zt="{{nd2.ZHUANGTAI}}">
+                            <a class="media-object pull-left"></a>
+
+                            <div class="media-body">
+                                <div class="media-heading">
+                                    <div class="input-group col-md-4">
+                                        <input type="text" class="form-control"
+                                               ng-model="nd2.ZHISHIDIANMINGCHENG">
+                                         <span class="input-group-btn">
+                                          <button class="btn btn-default dgAddBtn dgAddBtn_1" ng-click="addNd(nd2)" type="button">
+                                              <span class="glyphicon glyphicon-plus"> </span>
+                                          </button>
+                                          <button class="btn btn-default dgDeleteBtn" ng-click="removeNd(zsd, $index)" type="button">
+                                            <span class="glyphicon glyphicon-trash"> </span>
+                                          </button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- 三级 -->
+                                <div ng-repeat="nd3 in nd2.ZIJIEDIAN" class="media dgLevel_2"
+                                     data-jdId="{{nd3.JIEDIAN_ID}}" data-zsdId="{{nd3.ZHISHIDIAN_ID}}"
+                                     data-jdxh="{{nd3.JIEDIANXUHAO}}" data-zsdlx="{{nd3.LEIXING}}"
+                                     data-jdlx="{{nd3.JIEDIANLEIXING}}" data-zt="{{nd3.ZHUANGTAI}}">
+                                    <a class="media-object pull-left"> </a>
+
+                                    <div class="media-body">
+                                        <div class="media-heading">
+                                            <div class="input-group col-md-4">
+                                                <input type="text" class="form-control"
+                                                       ng-model="nd3.ZHISHIDIANMINGCHENG">
+                                                  <span class="input-group-btn">
+                                                     <button class="btn btn-default dgAddBtn dgAddBtn_2"
+                                                             ng-click="addNd(nd3)"
+                                                             type="button">
+                                                         <span class="glyphicon glyphicon-plus"></span>
+                                                     </button>
+                                                     <button class="btn btn-default dgDeleteBtn" ng-click="removeNd(nd2, $index)"
+                                                             type="button">
+                                                         <span class="glyphicon glyphicon-trash"> </span>
+                                                     </button>
+                                                  </span>
+                                            </div>
+                                        </div>
+                                        <!-- 四级 -->
+                                        <div ng-repeat="nd4 in nd3.ZIJIEDIAN" class="media dgLevel_3"
+                                             data-jdId="{{nd4.JIEDIAN_ID}}"
+                                             data-zsdId="{{nd4.ZHISHIDIAN_ID}}" data-jdxh="{{nd4.JIEDIANXUHAO}}"
+                                             data-zsdlx="{{nd4.LEIXING}}" data-jdlx="{{nd4.JIEDIANLEIXING}}"
+                                             data-zt="{{nd4.ZHUANGTAI}}">
+                                            <a class="media-object pull-left"> </a>
+
+                                            <div class="media-body">
+                                                <div class="media-heading">
+                                                    <div class="input-group col-md-4">
+                                                        <input type="text" class="form-control"
+                                                               ng-model="nd4.ZHISHIDIANMINGCHENG">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-default dgDeleteBtn"
+                                                                   ng-click="removeNd(nd3, $index)" type="button">
+                                                                <span class="glyphicon glyphicon-trash"> </span>
+                                                            </button> </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="col-md-6 text-right mt30 saveBtbBox">
+                <button class="btn btn-primary saveDagangBtn" ng-click="submitData()" ng-hide="saveDagangBtn">保存修改</button>
+            </div>
+        </div>
+    </div>
+</div>

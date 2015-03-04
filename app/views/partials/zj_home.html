@@ -1,0 +1,19 @@
+<div class="sub-nav">
+    <ul class="nav nav-tabs">
+        <li ng-class="{active: zj_tabActive == 'shiJuan' }">
+            <a href="javascript:void(0)" ng-click="showPaperList()">
+                试卷列表
+            </a>
+        </li>
+        <li ng-class="{active: zj_tabActive == 'zjRule'}">
+            <a href="javascript:void(0)" ng-click="showZuJuanRuleList()">
+                组卷规则
+            </a>
+        </li>
+    </ul>
+    <!-- 考务的容器 开始-->
+    <div class="tab-content" ng-include="zjTpl">
+
+    </div>
+    <!-- 考务的容器 结束-->
+</div>

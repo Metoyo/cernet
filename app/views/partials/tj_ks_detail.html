@@ -1,0 +1,19 @@
+<button class="btn btn-primary" ng-click="exportKsInfo()">导出考生信息</button>
+<table class="tj-table tj-table-detail">
+    <tr>
+        <th ng-click="ksSortDataFun('stuId')">学号</th>
+        <th ng-click="ksSortDataFun('name')">姓名</th>
+        <th ng-click="ksSortDataFun('class')">班级</th>
+        <th ng-click="ksSortDataFun('score')">成绩</th>
+    </tr>
+    <tr ng-repeat="ksd in tjKaoShengDetail">
+        <td ng-bind="ksd.YONGHUHAO">
+        </td>
+        <td ng-bind="ksd.XINGMING">
+        </td>
+        <td ng-bind="ksd.BANJI">
+        </td>
+        <td ng-bind="ksd.ZUIHOU_PINGFEN">
+        </td>
+    </tr>
+</table>

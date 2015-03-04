@@ -1,0 +1,80 @@
+<div class="row paper-list">
+    <div class="loading-box text-center" ng-show="loadingImgShow">
+        <img src="/images/loading.gif" alt="" width="64" height="64"/>
+        <p>数据加载中，请耐心等待……</p>
+    </div>
+    <ul class="list-unstyled zj_list">
+        <li>
+            <table class="table table-title">
+                <tr>
+                    <th>规则名称</th>
+                    <th width="120px">创建时间</th>
+                    <th width="120px">上一次使用时间</th>
+                    <th width="80px">使用次数</th>
+                    <th width="210px">操作</th>
+                </tr>
+            </table>
+        </li>
+        <li ng-repeat="zjr in zjRuleData">
+            <table class="table" bn-slide-show slide-show-target="more-info">
+                <tr ng-init="zjRuleNameInputShow=false">
+                    <td>
+                        <a href="javascript:void(0)" ng-bind="zjr.GUIZEMINGCHENG" ng-hide="zjRuleNameInputShow"
+                                ng-click="ruleMakePaper(zjr)"></a>
+                        <input type="text" class="zjRuleName" ng-model="zjr.GUIZEMINGCHENG" ng-show="zjRuleNameInputShow"
+                               ng-blur="saveZjRule(zjr, 'upd');zjRuleNameInputShow=false"/>
+                    </td>
+                    <td width="120px" class="text-center" ng-bind="zjr.CREATE_TIME| myLocalDate | date : 'yyyy-MM-dd'">
+                    </td>
+                    <td width="120px" class="text-center" ng-bind="zjr.UPDATE_TIME| myLocalDate | date : 'yyyy-MM-dd'">
+                    </td>
+                    <td width="80px" class="text-center" ng-bind="zjr.SHIYONGCISHU"></td>
+                    <td width="210px" class="text-center">
+                        <button type="button" class="btn btn-default" ng-click="saveZjRule(zjr.XUANTIGUIZE_ID, 'del')">
+                            删除
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="zjRuleNameInputShow=true">重命名</button>
+                        <button type="button" class="btn btn-default" ng-click="directRuleMakePaper(zjr)">组卷</button>
+                    </td>
+                </tr>
+            </table>
+            <div class="more-info">
+                <div>
+                    <h5>
+                        题型分布：
+                    </h5>
+                    <p>
+                        <span ng-repeat="tx in zjr.txTongJi" ng-show="tx.txTotalNum>0">
+                            {{tx.TIXINGMINGCHENG}}:{{tx.txTotalNum}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <!--<div class="paging text-right">-->
+        <!--<ul class="pagination pagination-sm" ng-hide="!papertListIds">-->
+            <!--<li ng-class="{disabled: currentPageVal == 1}">-->
+                <!--<a href ng-click="getThisSjgyPageData(1)">首页</a>-->
+            <!--</li>-->
+            <!--<li ng-class="{disabled: currentPageVal == 1}">-->
+                <!--<a href-->
+                   <!--ng-click="getThisSjgyPageData(prevPg = currentPageVal > 1 ? currentPageVal - 1 : 1)">-->
+                    <!--上一页-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ng-repeat="pg in paperPages" ng-class="{active: currentPageVal == pg}">-->
+                <!--<a href ng-click="getThisSjgyPageData(pg)">{{pg}}</a>-->
+            <!--</li>-->
+            <!--<li ng-class="{disabled: currentPageVal == lastPaperPageNum}">-->
+                <!--<a href-->
+                   <!--ng-click="getThisSjgyPageData(nextPg = currentPageVal < lastPaperPageNum ? currentPageVal + 1 : lastPaperPageNum)">-->
+                    <!--下一页-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ng-class="{disabled: currentPageVal == lastPaperPageNum}">-->
+                <!--<a href  ng-click="getThisSjgyPageData(lastPaperPageNum)">尾页</a>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+</div>

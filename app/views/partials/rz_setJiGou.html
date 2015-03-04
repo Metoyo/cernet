@@ -1,0 +1,97 @@
+<h4>机构设置</h4>
+<div class="form-group">
+    <select ng-model="selected_jglb" class="form-control organization"
+            ng-change="getJgList(selected_jglb)"
+            ng-options="lb.LEIBIE_ID as lb.LEIBIEMINGCHENG for lb in jigoulb_list">
+        <option value="">请选择机构类型</option>
+    </select>
+</div>
+<!--机构管理页面-->
+<table class="table table-bordered jg-table">
+    <tr>
+        <th>机构名称</th>
+        <th>机构管理员</th>
+        <th width="232px">操作</th>
+    </tr>
+    <tr ng-repeat="jg in jigou_list">
+        <td ng-bind="jg.JIGOUMINGCHENG"></td>
+        <td>
+            <span ng-repeat="adm in jg.ADMINISTRATORS" ng-bind="adm.YONGHUMING"></span>
+        </td>
+        <td>
+            <a href="javascript:void(0)" ng-click="manageAdmin(jg, $index)">管理管理员</a>
+            <a href="javascript:void(0)" ng-click="deleteJiGou(jg)">删除</a>
+            <a href="javascript:void(0)" ng-click="addNewJiGouBoxShow(jg)">修改名称</a>
+        </td>
+    </tr>
+</table>
+<div class="delete-msg">
+    <span class="save-msg">删除成功!</span>
+</div>
+<div class="add-btn-box" ng-show="selected_jglb && !isAddNewAdminBoxShow">
+    <button type="button" class="btn btn-primary" ng-click="addNewJiGouBoxShow()">
+        新增机构
+    </button>
+</div>
+<div class="form-horizontal add-new-box" ng-show="isAddNewJiGouBoxShow">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">机构名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="机构名称" ng-model="addNewJiGou.shuju[0].JIGOUMINGCHENG">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10 text-right">
+            <span class="save-msg">保存成功!</span>
+            <button type="button" class="btn btn-primary" ng-click="saveNewAddJiGou()">提交</button>
+            <button type="button" class="btn btn-danger" ng-click="closeAddNewJiGou()">取消</button>
+        </div>
+    </div>
+</div>
+<!--机构管理员管理页面-->
+<div class="form-horizontal add-new-box" ng-show="isAddNewAdminBoxShow">
+    <table class="table table-bordered jg-table">
+        <tr>
+            <th class="text-center" ng-bind="adminList.JIGOUMINGCHENG" colspan="2">
+            </th>
+        </tr>
+        <tr>
+            <th>机构管理员</th>
+            <th width="232px">操作</th>
+        </tr>
+        <tr ng-repeat="adm in adminList.ADMINISTRATORS">
+            <td ng-bind="adm.YONGHUMING">
+            </td>
+            <td>
+                <a href="javascript:void(0)" ng-click="deleteJiGouAdmin(adm)">删除</a>
+                <a href="javascript:void(0)" ng-click="resetJgAdminName(adm)">重置密码</a>
+            </td>
+        </tr>
+    </table>
+    <div class="reset-admin-psw" ng-show="isResetJgAdminPsw">
+        管理员<strong ng-bind="jgAdminName"></strong>的密码重置成功，新密码为：<strong ng-bind="jgAmdinNewPsw"></strong>
+    </div>
+    <h5>添加管理员</h5>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">管理员账号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="管理员账号"
+                   ng-model="newAdmin.shuju.ADMINISTRATORS[0].YONGHUMING">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">管理员密码</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="管理员密码"
+                   ng-model="newAdmin.shuju.ADMINISTRATORS[0].MIMA">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10 text-right">
+            <span class="save-msg">保存成功!</span>
+            <button type="button" class="btn btn-primary" ng-click="saveNewAddAdmin()">添加</button>
+            <button type="button" class="btn btn-danger" ng-click="closeManageAdmin()">取消</button>
+        </div>
+    </div>
+</div>
+

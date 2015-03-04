@@ -1,0 +1,29 @@
+<div class="innerWrap innerWrapperSubDs kaowuWrapper">
+    <div class="dagangListWrap">
+        <h2 class="logo pull-left">
+            <img src="/images/mingti/icon/logo.png" alt="">
+        </h2>
+        <div class="subjectBox clearfix">
+            <h2 class="pull-left" ng-bind="session.defaultLyName"></h2>
+        </div>
+    </div>
+    <div class="sub-nav" ng-init="tabActive = 'ksgl'">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: tabActive == 'kcgl' }">
+                <a href="javascript:void(0)" ng-click="tabActive = 'kcgl';showKaoChangList()">
+                    考场管理
+                </a>
+            </li>
+            <li ng-class="{active: tabActive == 'ksgl'}">
+                <a href="javascript:void(0)" ng-click="tabActive = 'ksgl';showKaoShiList('all')">
+                    考试管理
+                </a>
+            </li>
+        </ul>
+        <!-- 考务的容器 开始-->
+        <div class="tab-content" ng-init="txTpl = 'views/partials/kaoShiList.html'" ng-include="txTpl">
+
+        </div>
+        <!-- 考务的容器 结束-->
+    </div>
+</div>

@@ -1,0 +1,160 @@
+<!--题型和难度DOM元素， 开始-->
+<div class="row fixed-top">
+    <div class="kmTxWrap pull-left">
+        <div class="kmTxBox">
+            <ul class="list-inline kmTxNdList pull-left getTiXingIdList">
+                <li class="tiXingId_all">
+                    <a href="javascript:void(0)" ng-click="getTiXingId()"
+                       ng-class="{active:txSelectenIdx == 0}">全部题型</a>
+                </li>
+                <li ng-repeat="kmtx in kmtxList">
+                    <a href="javascript:void(0)" ng-click="getTiXingId(kmtx.TIXING_ID)"
+                            ng-class="{active:txSelectenIdx == kmtx.TIXING_ID}"
+                            ng-hide="hideOrShowTixing ? !(txSelectenIdx == kmtx.TIXING_ID) : false">
+                        {{ kmtx.TIXINGMINGCHENG }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="nanduBox">
+            <ul class="list-inline kmTxNdList pull-left getNanDuIdList">
+                <li class="nanDuId_all">
+                    <a href="javascript:void(0)" ng-click="getNanDuId()" ng-class="{active:ndSelectenIdx == 0}">全部难度</a>
+                </li>
+                <li class="nanDuId_1">
+                    <a href="javascript:void(0)" ng-click="getNanDuId(1)" ng-class="{active:ndSelectenIdx == 1}">容易</a>
+                </li>
+                <li class="nanDuId_2">
+                    <a href="javascript:void(0)" ng-click="getNanDuId(2)" ng-class="{active:ndSelectenIdx == 2}">较易</a>
+                </li>
+                <li class="nanDuId_3">
+                    <a href="javascript:void(0)" ng-click="getNanDuId(3)" ng-class="{active:ndSelectenIdx == 3}">一般</a>
+                </li>
+                <li class="nanDuId_4">
+                    <a href="javascript:void(0)" ng-click="getNanDuId(4)" ng-class="{active:ndSelectenIdx == 4}">较难</a>
+                </li>
+                <li class="nanDuId_5">
+                    <a href="javascript:void(0)" ng-click="getNanDuId(5)" ng-class="{active:ndSelectenIdx == 5}">困难</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="back-to-zujuan pull-left">
+        <!--<button type="button" class="btn btn-danger" ng-click="dropMakePaper()">返回</button>-->
+        <button type="button" class="btn btn-danger" ng-click="shijuanPreview()">试卷预览</button>
+    </div>
+</div>
+<!--题型和难度DOM元素， 结束-->
+<div class="row test-list-wrap">
+    <div class="loading-box text-center" ng-show="loadingImgShow">
+        <img src="/images/loading.gif" alt="" width="64" height="64"/>
+        <p>数据加载中，请耐心等待……</p>
+    </div>
+    <div class="total-test clearfix mt15">
+        <div class="pull-left mt5">
+            共<strong>{{testListId.length}}</strong>题
+        </div>
+        <div class="pull-right">
+            <div class="pull-left">
+                <input type="text" ng-model="zuJuanParam.tiMuId" placeholder="题目ID" class="pull-left w80 mr5 h28"
+                       onkeyup="if(isNaN(value))execCommand('undo')"
+                       onafterpaste="if(isNaN(value))execCommand('undo')"/>
+                <button type="button" class="btn btn-primary" ng-click="qryTestByTiMuId()">查询</button>
+            </div>
+            <div class="pull-left ml10">
+                <select ng-model="zuJuanParam.tiMuAuthorId" class="form-control pull-right w200 h28 mr5"
+                        ng-change="qryTiMuByChuTiRenId()"
+                        ng-options="ctr.UID as ctr.XINGMING for ctr in chuTiRens">
+                    <option value="">请选择出题人</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!--<div class="errorMsg" ng-hide="timudetails.length">没有找到符合的题目！</div>-->
+    <button type="button" class="reloadMath hide">点我</button> <!--用于刷新函数-->
+    <ul class="list-unstyled testList" id="testList">
+        <li ng-repeat="tm in timudetails" class="delete_{{tm.TIMU_ID}}" repeat-done>
+            <h3 class="item-title text-right" ng-hide="isreplacetm">
+                <button type="button" class="btn btn-primary" ng-click="addToPaper(tm)"
+                        ng-hide="selectTestStr.indexOf('selectTest' + tm.TIMU_ID  + ',') >=0">加入试卷</button>
+                <button type="button" class="btn btn-default" ng-click="removeOutPaper(tm)"
+                        ng-show="selectTestStr.indexOf('selectTest' + tm.TIMU_ID  + ',') >=0">移出试卷</button>                
+            </h3>
+            <h3 class="item-title text-right" ng-show="isreplacetm">
+                <button type="button" class="btn btn-primary" ng-click="replaceCurrentTM(tm)"
+                ng-show="selectTestStr.indexOf('selectTest' + tm.TIMU_ID  + ',') < 0">替换</button>
+                <button type="button" class="btn"
+                ng-hide="selectTestStr.indexOf('selectTest' + tm.TIMU_ID  + ',') < 0">已选</button>
+            </h3>
+            <div class="item-sub-title pull-left">
+                <p class="knowledge-point">
+                    题型：<span ng-bind="tiXingNameArr[tm.TIXING_ID-1]"></span>
+                </p>
+                <p class="knowledge-point">
+                    知识点：<span ng-repeat="zsd in tm.ZHISHIDIAN" ng-bind="zsd.ZHISHIDIANMINGCHENG"></span>
+                </p>
+                <p class="level-num">
+                    难易度：<span class="pull-right level-star-{{tm.NANDU_ID}}"></span>
+                </p>
+                <p class="knowledge-point">
+                    出题人：<span class="pull-right" ng-bind="tm.chuangjianren"></span>
+                </p>
+                <p class="knowledge-point">
+                    ID：<span class="pull-right" ng-bind="tm.TIMU_ID"></span>
+                </p>
+            </div>
+            <div class="item-cont">
+                <h3 class="item-tigan" ng-bind-html="tm.TIGAN.tiGan | outTiGan:tm.TIXING_ID"></h3>
+                <div class="item-tizhi-wrap">
+                    <p class="item-tizhi" ng-repeat="tz in tm.TIGAN.tiZhiNeiRong track by $index">
+                        <span ng-cloak>{{'(' + letterArr[$index] + ')'}}</span>
+                        <span ng-bind="tz"></span>
+                    </p>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="paging text-right">
+        <ul class="pagination pagination-sm" ng-hide="!testListId">
+            <li ng-class="{disabled: currentPageNum == 1}">
+                <a href ng-click="getThisPageData(1)">首页</a>
+            </li>
+            <li ng-class="{disabled: currentPageNum == 1}">
+                <a href
+                   ng-click="getThisPageData(prevPg = currentPageNum > 1 ? currentPageNum - 1 : 1)">
+                    上一页
+                </a>
+            </li>
+            <li ng-repeat="pg in pages track by $index" ng-class="{active: currentPageNum == pg}">
+                <a href ng-click="getThisPageData(pg)">{{pg}}</a>
+            </li>
+            <li ng-class="{disabled: currentPageNum == lastPageNum}">
+                <a href
+                   ng-click="getThisPageData(nextPg = currentPageNum < lastPageNum ? currentPageNum + 1 : lastPageNum)">
+                    下一页
+                </a>
+            </li>
+            <li ng-class="{disabled: currentPageNum == lastPageNum}">
+                <a href  ng-click="getThisPageData(lastPageNum)">尾页</a>
+            </li>
+        </ul>
+        <div>
+            <span>共 <strong ng-bind="lastPageNum"></strong> 页，</span><span>跳转到</span>
+            <input type="text" ng-model="zuJuanParam.goToPageNum" class="w110"
+                   onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')">
+            <span>页</span> <button ng-click="getFixedPageData()">GO</button></div>
+    </div>
+</div>
+<script type="text/javascript" src="bower_components/markitup/MathJax.js?config=TeX-AMS_HTML-full"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [["#$", "$#"]], displayMath: [['#$$','$$#']]},
+    messageStyle: "none",
+    showMathMenu: false,processEscapes: true
+  });
+</script>
+<script type="text/javascript">
+    $('.reloadMath').on('click', function(){
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "testList"]);
+    });
+</script>

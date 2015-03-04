@@ -1,0 +1,76 @@
+<div class="row">
+    <form class="form-horizontal" role="form" name="kaochangForm" novalidate>
+        <div class="form-group explain">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-10">
+                <em>带 <i>*</i>为必填项</em>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">考场名称<i>*</i></label>
+            <div class="col-sm-8">
+                <input type="text" name="kcName" class="form-control" placeholder="考场名称" required autofocus="true"
+                       ng-model="kaochangData.shuju.KMINGCHENG"/>
+            </div>
+            <div class="col-sm-2">
+                <p ng-show="kaochangForm.kcName.$error.required" class="help-block">考场名称不能为空！</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">考位数量<i>*</i></label>
+            <div class="col-sm-8">
+                <input type="text" name="kcSiteNum" class="form-control" placeholder="考位数量" required
+                       onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="4"
+                       onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                       ng-model="kaochangData.shuju.KAOWEISHULIANG"/>
+            </div>
+            <div class="col-sm-2">
+                <p ng-show="kaochangForm.kcSiteNum.$error.required" class="help-block">考位数量不能为0！</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">考场地址<i>*</i></label>
+            <div class="col-sm-8">
+                <input type="text" name="kcAddress" class="form-control" placeholder="考场地址" required
+                        ng-model="kaochangData.shuju.XIANGXIDIZHI"/>
+            </div>
+            <div class="col-sm-2">
+                <p ng-show="kaochangForm.kcAddress.$error.required" class="help-block">考场地址不能为空！</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">交通方式</label>
+            <div class="col-sm-8">
+                <input type="text" name="kcByCar" class="form-control" placeholder="交通方式"
+                       ng-model="kaochangData.shuju.JIAOTONGFANGSHI"/>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">联系人<i>*</i></label>
+            <div class="col-sm-8">
+                <input type="text" name="kcOwner" class="form-control" placeholder="联系人" required
+                        ng-model="kaochangData.shuju.LIANXIREN"/>
+            </div>
+            <div class="col-sm-2">
+                <p ng-show="kaochangForm.kcOwner.$error.required" class="help-block">联系人不能为空！</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">联系方式</label>
+            <div class="col-sm-8">
+                <input type="text" name="kcOwnerPhone" class="form-control" placeholder="联系方式"
+                       ng-model="kaochangData.shuju.LIANXIFANGSHI"/>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-primary" ng-click="saveKaoChang()">保存</button>
+                <button type="button" class="btn btn-danger" ng-click="showKaoChangList()">取消</button>
+            </div>
+        </div>
+    </form>
+</div>

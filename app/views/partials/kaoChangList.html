@@ -1,0 +1,74 @@
+<div class="loading-box text-center" ng-show="loadingImgShow">
+    <img src="/images/loading.gif" alt="" width="64" height="64"/>
+    <p>数据加载中，请耐心等待……</p>
+</div>
+<div class="row">
+    <button type="button" class="btn btn-primary" ng-click="addNewKaoChang()">新增考场</button>
+</div>
+<table class="table table-bordered kaowu-table kaoChangList">
+    <tr class="active">
+        <th>考场名称</th>
+        <th>考位数量</th>
+        <th>考场地址</th>
+        <th>交通方式</th>
+        <th>联系人</th>
+        <th>联系方式</th>
+        <th width="205px">操作</th>
+    </tr>
+    <tr ng-repeat="kc in kaoChangList">
+        <td>
+            {{kc.KMINGCHENG}}
+        </td>
+        <td class="text-center">
+            {{kc.KAOWEISHULIANG}}
+        </td>
+        <td>
+            {{kc.XIANGXIDIZHI}}
+        </td>
+        <td>
+            {{kc.JIAOTONGFANGSHI}}
+        </td>
+        <td class="text-center">
+            {{kc.LIANXIREN}}
+        </td>
+        <td class="text-center">
+            {{kc.LIANXIFANGSHI}}
+        </td>
+        <td class="text-center">
+            <button type="button" class="btn btn-default" ng-click="deleteKaoChang(kc)">删除</button>
+            <button type="button" class="btn btn-primary" ng-click="editKaoChang(kc)">修改</button>
+            <button type="button" class="btn btn-primary" bn-slide-show slide-show-target="moreBtnCont"
+                    slide-show-dirt="left">激活码</button>
+            <div class="moreBtnCont">
+                <div class="mbc-inner" ng-bind="kc.JIHUOMA">
+
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+<div class="paging text-right">
+    <ul class="pagination pagination-sm" ng-hide="!kaoChangListIds">
+        <li ng-class="{disabled: currentKcPageVal == 1}">
+            <a href ng-click="getThisKaoChangPageData(1)">首页</a>
+        </li>
+        <li ng-class="{disabled: currentKcPageVal == 1}">
+            <a href
+               ng-click="getThisKaoChangPageData(prevPg = currentKcPageVal > 1 ? currentKcPageVal - 1 : 1)">
+                上一页
+            </a>
+        </li>
+        <li ng-repeat="pg in kaoChangPages" ng-class="{active: currentKcPageVal == pg}">
+            <a href ng-click="getThisKaoChangPageData(pg)">{{pg}}</a>
+        </li>
+        <li ng-class="{disabled: currentKcPageVal == lastKaoChangPageNum}">
+            <a href
+               ng-click="getThisKaoChangPageData(nextPg = currentKcPageVal < lastKaoChangPageNum ? currentKcPageVal + 1 : lastKaoChangPageNum)">
+                下一页
+            </a>
+        </li>
+        <li ng-class="{disabled: currentKcPageVal == lastKaoChangPageNum}">
+            <a href  ng-click="getThisKaoChangPageData(lastKaoChangPageNum)">尾页</a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,60 @@
+<h4>领域设置</h4>
+<div class="dagangInput">
+    <div ng-repeat="ly in lingyu_list" class="media dagangBox selectLingYu dgLevel_0">
+        <div class="media-body">
+            <div class="media-heading">
+                <div class="input-group col-md-6">
+                    <div class="form-control all-lingYu" ng-bind="ly.REMARK"></div>
+                </div>
+            </div>
+            <!-- 二级 -->
+            <div ng-repeat="nd1 in ly.CHILDREN" class="media dgLevel_1">
+                <a class="media-object pull-left"></a>
+                <div class="media-body">
+                    <div class="media-heading">
+                        <div class="input-group col-md-6">
+                            <div class="form-control" ng-bind="nd1.LINGYUMINGCHENG"></div>
+                            <span class="input-group-addon">
+                                <input type="checkbox" value="{{nd1.LINGYU_ID}}" class="{{'checkbox' + nd1.LINGYU_ID}}"
+                                       ng-click="addLingYuToSelect($event, nd1, ly)"
+                                       ng-checked="selectedLyStr.indexOf('sly' + nd1.LINGYU_ID + ';') >= 0">
+                            </span>
+                        </div>
+                    </div>
+                    <!-- 三级 -->
+                    <div ng-repeat="nd2 in nd1.CHILDREN" class="media dgLevel_2">
+                        <a class="media-object pull-left"></a>
+                        <div class="media-body">
+                            <div class="media-heading">
+                                <div class="input-group col-md-6">
+                                    <div class="form-control" ng-bind="nd2.LINGYUMINGCHENG"></div>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox" value="{{nd2.LINGYU_ID}}" class="{{'checkbox' + nd2.LINGYU_ID}}"
+                                               ng-click="addLingYuToSelect($event, nd2, nd1)"
+                                               ng-checked="selectedLyStr.indexOf('sly' + nd2.LINGYU_ID + ';') >= 0">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--已选科目-->
+    <div class="selected-lingYu">
+        <h4><strong>已选科目:</strong></h4>
+        <div ng-repeat="sLy in jgSelectLingYu">
+            <p ng-repeat="cly in sLy.CHILDREN">
+                <span ng-bind="cly.LINGYUMINGCHENG"></span>
+            <span class="glyphicon glyphicon-remove delete-select-ly pull-right" title="删除已选科目"
+                  ng-click="deleteSelectedLingYu(cly, $index, $parent.$index)"></span>
+            </p>
+        </div>
+
+    </div>
+</div>
+<div class="save-box">
+    <span class="save-msg">保存成功!</span>
+    <button class="btn btn-primary" ng-click="saveChooseLingYu()">保存</button>
+</div>

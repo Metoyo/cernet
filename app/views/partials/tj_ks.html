@@ -1,0 +1,46 @@
+<table class="tj-table">
+    <tr>
+        <th>考试名称</th>
+        <th>试卷名称</th>
+        <th width="120px" class="text-center">考试人数</th>
+        <th width="120px" class="text-center">考试时间</th>
+    </tr>
+    <tr ng-repeat="ks in tjData">
+        <td>
+            <a href="javascript:void(0)" ng-click="tjShowStudentInfo(ks.KAOSHI_ID, 'ksId', 'ksList', ks.KAOSHI_MINGCHENG)"
+               ng-bind="ks.KAOSHI_MINGCHENG"></a>
+        </td>
+        <td>
+            <a href="javascript:void(0)" ng-repeat="kssj in ks.SHIJUAN" ng-bind="kssj.SHIJUAN_MINGCHENG"
+               ng-click="tjShowStudentInfo(kssj.SHIJUAN_ID, 'sjId', 'ksList', kssj.SHIJUAN_MINGCHENG)"></a>
+        </td>
+        <td class="text-center" ng-bind="ks.KSRS"></td>
+        <td class="text-center" ng-bind="ks.KAISHISHIJIAN | myLocalDate | date : 'yyyy-MM-dd'"></td>
+    </tr>
+</table>
+<div class="paging text-right">
+    <ul class="pagination pagination-sm" ng-hide="!tjData">
+        <li ng-class="{disabled: currentPage == 1}">
+            <a href ng-click="tjPaging(1)">首页</a>
+        </li>
+        <li ng-class="{disabled: currentPage == 1}">
+            <a href
+               ng-click="tjPaging(prevPg = currentPage > 1 ? currentPage - 1 : 1)">
+                上一页
+            </a>
+        </li>
+        <li ng-repeat="pg in tjPages" ng-class="{active: currentPage == pg}">
+            <a href ng-click="tjPaging(pg)">{{pg}}</a>
+        </li>
+        <li ng-class="{disabled: currentPage == lastPageNum}">
+            <a href
+               ng-click="tjPaging(nextPg = currentPage < lastPageNum ? currentPage + 1 : lastPageNum)">
+                下一页
+            </a>
+        </li>
+        <li ng-class="{disabled: currentPage == lastPageNum}">
+            <a href  ng-click="tjPaging(lastPageNum)">尾页</a>
+        </li>
+    </ul>
+</div>
+

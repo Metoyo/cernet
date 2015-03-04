@@ -1,0 +1,58 @@
+<h4>领域设置</h4>
+<div class="dagangInput">
+    <div ng-repeat="ly in lingyu_list" class="media dagangBox dgLevel_0">
+        <div class="media-body">
+            <div class="media-heading">
+                <div class="col-md-6">
+                    <div class="form-control radius4 dagangName">
+                        {{ly.REMARK}}
+                        <button class="btn btn-default dgAddBtn dgAddBtn_0" ng-click="addNd(ly)" type="button">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- 二级 -->
+            <div ng-repeat="nd1 in ly.CHILDREN" class="media dgLevel_1">
+                <a class="media-object pull-left"></a>
+                <div class="media-body">
+                    <div class="media-heading">
+                        <div class="input-group col-md-6">
+                            <input type="text" class="form-control" ng-model="nd1.LINGYUMINGCHENG">
+                            <span class="input-group-btn">
+                                 <button class="btn btn-default dgAddBtn dgAddBtn_1" ng-click="addNd(nd1)" type="button">
+                                     <span class="glyphicon glyphicon-plus"> </span>
+                                 </button>
+                                 <button class="btn btn-default dgDeleteBtn" type="button"
+                                         ng-click="removeNd(ly, nd1, $index)">
+                                     <span class="glyphicon glyphicon-trash"> </span>
+                                 </button>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- 三级 -->
+                    <div ng-repeat="nd2 in nd1.CHILDREN" class="media dgLevel_2">
+                        <a class="media-object pull-left"></a>
+                        <div class="media-body">
+                            <div class="media-heading">
+                                <div class="input-group col-md-6">
+                                    <input type="text" class="form-control" ng-model="nd2.LINGYUMINGCHENG">
+                                    <span class="input-group-btn">
+                                         <button class="btn btn-default dgDeleteBtn" type="button"
+                                                 ng-click="removeNd(nd1, nd2, $index)">
+                                             <span class="glyphicon glyphicon-trash"> </span>
+                                         </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="save-box">
+    <span class="save-msg">保存成功!</span>
+    <button class="btn btn-primary" ng-click="saveLingYuChange()">保存</button>
+</div>
